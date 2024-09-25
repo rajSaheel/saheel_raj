@@ -7,15 +7,15 @@ import Modal from "./components/Modal.tsx"
 
 const App: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
-    const [generatedText, setGeneratedText] = useState<string | null>(null)
+    const [generatedText, setGeneratedText] = useState<string>("")
 
-    const handleAIIconClick = () => {
+    const handleGPTIconClick = () => {
         setIsModalOpen(true)
     }
 
     const handleCloseModal = () => {
         setIsModalOpen(false)
-        setGeneratedText(null)
+        setGeneratedText("")
     }
 
     const handleGenerate = (command: string) => {
@@ -25,57 +25,31 @@ const App: React.FC = () => {
     }
 
     const handleInsert = () => {
+        console.log("Insert Clicked")
         if (generatedText) {
             const inputField = document.querySelector(
                 ".msg-form__contenteditable p"
             )
+            const placeholder = document.querySelector(".msg-form__placeholder")
             if (inputField) {
                 console.log("Insert Clicked")
+                placeholder?.setAttribute("data-placeholder", "")
                 inputField.textContent = generatedText
-                const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
-                    window.HTMLDivElement.prototype,
-                    "innerText"
-                )?.set
-                if (nativeInputValueSetter) {
-                    nativeInputValueSetter.call(inputField, generatedText)
-                    const event = new Event("input", { bubbles: true })
-                    inputField.dispatchEvent(event)
-                }
-            } else alert("target")
+            }
             handleCloseModal()
         }
     }
 
     return (
         <>
-            <AIIcon onClick={handleAIIconClick} />
+            <AIIcon onClick={handleGPTIconClick} />
             <Modal
+                command={generatedText}
                 isOpen={isModalOpen}
                 onClose={handleCloseModal}
                 onGenerate={handleGenerate}
+                onInsert={handleInsert}
             />
-            {generatedText && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                    <div className="bg-white rounded-lg p-6 w-80 shadow-lg relative">
-                        <button
-                            className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-                            onClick={handleCloseModal}
-                        >
-                            &times;
-                        </button>
-                        <h2 className="text-xl font-semibold mb-4">
-                            Generated Reply
-                        </h2>
-                        <p className="mb-4">{generatedText}</p>
-                        <button
-                            onClick={handleInsert}
-                            className="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600"
-                        >
-                            Insert
-                        </button>
-                    </div>
-                </div>
-            )}
         </>
     )
 }

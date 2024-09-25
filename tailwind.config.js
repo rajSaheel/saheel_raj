@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
     content: [
-        "./entrypoints/popup/**/*.{html,js,ts,jsx,tsx}",
+        "./entrypoints/popup/main.tsx",
         "./entrypoints/gpt.content/index.tsx",
     ],
     theme: {

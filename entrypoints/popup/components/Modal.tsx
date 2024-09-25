@@ -1,14 +1,23 @@
-import React, { useEffect, useRef } from "react"
+import React, { useEffect, useRef, useState } from "react"
+import "../App.css"
+import "../style.css"
 
 interface ModalProps {
+    command: string
     isOpen: boolean
     onClose: () => void
     onGenerate: (command: string) => void
+    onInsert: () => void
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onGenerate }) => {
+const Modal: React.FC<ModalProps> = ({
+    command,
+    isOpen,
+    onClose,
+    onGenerate,
+    onInsert,
+}) => {
     const modalRef = useRef<HTMLDivElement>(null)
-    const [command, setCommand] = React.useState("")
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -66,7 +75,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onGenerate }) => {
                     type="text"
                     placeholder="Enter your command..."
                     value={command}
-                    onChange={(e) => setCommand(e.target.value)}
+                    onChange={(e) => (command = e.target.value)}
                     className="w-full p-2 border border-gray-300 rounded mb-4"
                 />
                 <button
@@ -74,6 +83,12 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onGenerate }) => {
                     className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
                 >
                     Generate
+                </button>
+                <button
+                    onClick={() => onInsert()}
+                    className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+                >
+                    Insert
                 </button>
             </div>
         </div>

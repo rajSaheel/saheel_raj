@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react"
+import "../App.css"
+import "../style.css"
 import Icon from "./16.png"
+
 interface AIIconProps {
     onClick: () => void
 }

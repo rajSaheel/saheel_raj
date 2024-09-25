@@ -1,4 +1,3 @@
-import "./gpt.css"
 import ReactDOM from "react-dom/client"
 import App from "../popup/App.tsx"
 
