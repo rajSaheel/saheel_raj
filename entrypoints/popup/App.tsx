@@ -1,35 +1,83 @@
-import { useState } from 'react';
-import reactLogo from '@/assets/react.svg';
-import wxtLogo from '/wxt.svg';
-import './App.css';
+import { useState } from "react"
+import "./App.css"
 
-function App() {
-  const [count, setCount] = useState(0);
+import React from "react"
+import AIIcon from "./components/AIIcon.tsx"
+import Modal from "./components/Modal.tsx"
 
-  return (
-    <>
-      <div>
-        <a href="https://wxt.dev" target="_blank">
-          <img src={wxtLogo} className="logo" alt="WXT logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>WXT + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the WXT and React logos to learn more
-      </p>
-    </>
-  );
+const App: React.FC = () => {
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [generatedText, setGeneratedText] = useState<string | null>(null)
+
+    const handleAIIconClick = () => {
+        setIsModalOpen(true)
+    }
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false)
+        setGeneratedText(null)
+    }
+
+    const handleGenerate = (command: string) => {
+        setGeneratedText(
+            "Thank you for the opportunity! If you have any more questions or if there's anything else I can help you with, feel free to ask."
+        )
+    }
+
+    const handleInsert = () => {
+        if (generatedText) {
+            const inputField = document.querySelector(
+                ".msg-form__contenteditable p"
+            )
+            if (inputField) {
+                console.log("Insert Clicked")
+                inputField.textContent = generatedText
+                const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+                    window.HTMLDivElement.prototype,
+                    "innerText"
+                )?.set
+                if (nativeInputValueSetter) {
+                    nativeInputValueSetter.call(inputField, generatedText)
+                    const event = new Event("input", { bubbles: true })
+                    inputField.dispatchEvent(event)
+                }
+            } else alert("target")
+            handleCloseModal()
+        }
+    }
+
+    return (
+        <>
+            <AIIcon onClick={handleAIIconClick} />
+            <Modal
+                isOpen={isModalOpen}
+                onClose={handleCloseModal}
+                onGenerate={handleGenerate}
+            />
+            {generatedText && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                    <div className="bg-white rounded-lg p-6 w-80 shadow-lg relative">
+                        <button
+                            className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+                            onClick={handleCloseModal}
+                        >
+                            &times;
+                        </button>
+                        <h2 className="text-xl font-semibold mb-4">
+                            Generated Reply
+                        </h2>
+                        <p className="mb-4">{generatedText}</p>
+                        <button
+                            onClick={handleInsert}
+                            className="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600"
+                        >
+                            Insert
+                        </button>
+                    </div>
+                </div>
+            )}
+        </>
+    )
 }
 
-export default App;
+export default App

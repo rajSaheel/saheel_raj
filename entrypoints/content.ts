@@ -1,6 +1,9 @@
+import './popup/style.css'
+
 export default defineContentScript({
-  matches: ['*://*.google.com/*'],
-  main() {
-    console.log('Hello content.');
-  },
+  matches: ['*://*.linkedin.com/messaging/thread/*'],
+  cssInjectionMode:'ui',
+  main(ctx) {
+  
+  }
 });
