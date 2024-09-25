@@ -1,5 +1,4 @@
-import "../popup/style.css"
-import "../popup/App.css"
+import "./gpt.css"
 import ReactDOM from "react-dom/client"
 import App from "../popup/App.tsx"
 
@@ -9,15 +8,14 @@ export default defineContentScript({
 
     async main(ctx) {
         const injectAiIcon = async () => {
-            const ui = await createShadowRootUi(ctx, {
-                name: "gpt-ui",
+            const ui = createIntegratedUi(ctx, {
                 position: "inline",
                 onMount: (container) => {
                     const target = document.querySelector(
                         ".msg-form__contenteditable"
                     )
                     const app = document.createElement("div")
-                    app.id = "injected-shadow-element"
+                    app.id = "injected-gpt-icon"
                     target?.append(app)
 
                     const root = ReactDOM.createRoot(app)
@@ -31,24 +29,14 @@ export default defineContentScript({
 
             ui.mount()
         }
-        // const pollForMessageContainer = setInterval(() => {
-        //     const messagingContainer = document.querySelector(
-        //         ".msg-form__contenteditable"
-        //     )
-        //     if (messagingContainer) {
-        //         injectAiIcon()
-        //         clearInterval(pollForMessageContainer)
-        //     }
-        // }, 2000)
-        let injected = false
 
         const observer = new MutationObserver((mutations) => {
-            if (document.querySelector(".msg-form__contenteditable")) {
-                if (!injected) {
-                    injected = true
-                    injectAiIcon()
-                }
-            }
+            const messagingContainer = document.querySelector(
+                ".msg-form__contenteditable"
+            )
+            const injected = document.querySelector("#injected-gpt-icon")
+
+            if (messagingContainer && !injected) injectAiIcon()
         })
 
         observer.observe(document.body, {
