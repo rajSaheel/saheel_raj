@@ -1,9 +1,9 @@
 import ReactDOM from "react-dom/client"
 import App from "../popup/App.tsx"
+import "./gpt.css"
 
 export default defineContentScript({
     matches: ["*://*.linkedin.com/messaging/thread/*"],
-    cssInjectionMode: "ui",
 
     async main(ctx) {
         const injectAiIcon = async () => {

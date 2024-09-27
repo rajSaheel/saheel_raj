@@ -1,5 +1,6 @@
 import { useState } from "react"
 import "./App.css"
+import "./style.css"
 
 import React from "react"
 import AIIcon from "./components/AIIcon.tsx"

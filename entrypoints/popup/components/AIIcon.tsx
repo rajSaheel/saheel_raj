@@ -12,7 +12,7 @@ const AIIcon: React.FC<AIIconProps> = ({ onClick }) => {
         <img
             src={Icon}
             alt="AI Icon"
-            className="ai-icon cursor-pointer"
+            className="ai-icon cursor-icon"
             onClick={onClick}
         />
     )
